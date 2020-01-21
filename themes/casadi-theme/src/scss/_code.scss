@@ -1,0 +1,98 @@
+/* CODE STYLES */
+pre {
+  display: block;
+  margin: 0 0 1rem 0;
+  padding: .5rem 1rem;
+  background-color: $casadi-color-accent-gray;
+  color: $casadi-color-text;
+  font-size: .85rem;
+  line-height: 1.4rem;
+}
+code {
+  background-color: $casadi-color-accent-gray;
+  color: $casadi-color-text;
+  display: inline;
+  margin: 0;
+  padding: 5px 10px;
+
+  &.py-class {
+    padding: 0;
+    background-color: inherit;
+  }
+}
+pre code {
+  padding: 0;
+  margin: 0;
+}
+
+.exec-block-output pre {
+  padding: .5em 0 .5em 1em;
+  border: 0;
+  border-left: 2px double $casadi-color-accent;
+}
+
+.highlight .err {
+  border: none;
+}
+
+.sidebyside-master {
+margin: 0;
+padding: 0;
+display: block;
+overflow: auto;
+
+  &>.sidebyside {
+    width: 50%;
+    float: left;
+    padding: 0 .5em;
+    display: block;
+  }
+}
+
+// /* MULTISNIP EXTENSION */
+div.multisnip div:not(:first-child) {
+  display: none;
+}
+div.multisnip pre {
+  margin: 0;
+  border-top: $casadi-color-accent 1px solid;
+}
+div.multisnip ul.nav-tabs-multisnip>:first-child,
+div.multisnip ul.nav-tabs-multisnip>:first-child>a:hover  {
+  border-top-left-radius: 10px;
+}
+div.multisnip ul.nav-tabs-multisnip>:last-child,
+div.multisnip ul.nav-tabs-multisnip>:last-child>a:hover {
+  border-top-right-radius: 10px;
+}
+div.multisnip ul.nav-tabs-multisnip>li {
+  background-color: $casadi-color-accent-gray;
+  cursor: default;
+  text-transform: capitalize;
+}
+div.multisnip ul.nav-tabs-multisnip>li.isshown {
+  color: $casadi-color-accent-gray;
+  font-weight: 400;
+  background-color: $casadi-color-accent;
+}
+div.multisnip ul.nav-tabs-multisnip>li>a {
+  display: block;
+  padding: 10px;
+  font-size: 16px;
+  line-height: 16px;
+}
+div.multisnip ul.nav-tabs-multisnip>li>a:hover {
+  box-shadow: 0 -2px 0 0 $casadi-color-accent inset;
+}
+
+
+div.multisnip {
+  & figure {
+    margin: 0;
+    padding: 0 1rem 1rem 1rem;
+  }
+  & .MJXc-display {
+    margin: 0;
+    padding: 0 1rem 1rem 1rem;
+  }
+}

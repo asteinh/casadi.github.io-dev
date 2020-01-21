@@ -1,0 +1,14 @@
+{{ .Scratch.Set "Title" ( printf "%s - Blog - %s" .Site.Title .Title ) }}
+
+{{ partial "header" . }}
+{{ partial "nav-top" . }}
+<div id="main" class="container">
+  <div class="row">
+    <div class="col">
+      <h1>{{ .Title }}</h1>
+      {{ partial "reading-time" .Page }}
+      {{ .Content }}
+    </div>
+  </div>
+</div>
+{{ partial "footer" . }}

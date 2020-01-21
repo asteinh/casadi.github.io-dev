@@ -1,0 +1,30 @@
+/* Custom variables */
+$primary: rgb(220,   0,   0);
+$secondary: rgb(248, 248, 248);
+
+$casadi-color-accent:                 $primary;
+$casadi-color-accent-gray:            $secondary;
+
+$casadi-color-navbar-background:      $casadi-color-accent;
+$casadi-color-body-background:        $casadi-color-accent-gray;
+$casadi-color-container-background:   rgb(255, 255, 255);
+$casadi-color-footer-background:      $casadi-color-navbar-background;
+
+$casadi-color-text:                   rgb(  0,   0,   0);
+$casadi-color-text-secondary:         rgb(255, 255, 255);
+$casadi-color-text-hyperlink:         $casadi-color-accent; //rgb(  3, 102, 214);
+$casadi-color-text-muted:             rgb(125, 125, 125);
+
+$casadi-nav-top-height: 50px;
+$casadi-link-offset: 70px;
+
+
+
+/* overload bootstrap variables */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+
+$font-family-base: "Roboto", sans-serif;  // the general font
+
+$enable-rounded: false;                   // disable rounded borders
+
+$grid-gutter-width: 4rem;

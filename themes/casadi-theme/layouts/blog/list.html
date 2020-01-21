@@ -1,0 +1,40 @@
+{{ .Scratch.Set "Title" ( printf "%s - Blog" .Site.Title ) }}
+
+{{ partial "header" . }}
+{{ partial "nav-top" . }}
+
+<div id="main" class="container">
+  <div class="row">
+    <div class="col">
+
+      {{ .Content }}
+
+      <div class="card-columns">
+        {{ range $index, $post := (where .Site.Pages "Section" "blog") }}
+          {{ if isset $post.Params "date" }}
+            {{ if eq $index 0 }}
+            <div class="card border-success">
+            {{ else }}
+            <div class="card">
+            {{ end }}
+              {{ if $post.Params.image }}
+                <img class="card-img-top" src="{{ .Permalink }}{{ .Params.image }}" alt="Card image cap" />
+              {{ end }}
+              <div class="card-body">
+                <h5 class="card-title">{{ $post.Title }}</h5>
+                {{ $post.Summary }}
+                <a href="{{ $post.Permalink }}" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                {{ partial "reading-time-short" $post }}
+                posted {{ dateFormat "January 2, 2006" $post.Date }}
+              </div>
+            </div>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ partial "footer" . }}

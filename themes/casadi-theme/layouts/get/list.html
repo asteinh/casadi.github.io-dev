@@ -1,0 +1,138 @@
+{{ partial "header" . }}
+{{ partial "nav-top" . }}
+
+<div id="main" class="container">
+  <div class="row">
+    <div class="col">
+
+      {{ .Content }}
+
+      {{ $url := (printf "https://sourceforge.net/projects/casadi/files/CasADi/stats/json?start_date=1970-01-01&end_date=%s" (now.Format "2006-01-02")) }}
+      {{ $stats := getJSON $url }}
+
+      <!-- cache busting -->
+      {{ $url := (printf "https://api.github.com/repos/casadi/casadi/releases?per_page=100&%s&access_token=%s" (string now.Unix) ( getenv "GITHUB_TOKEN" ) ) }}
+      {{ $releases := getJSON $url }}
+
+      {{ $v1 := where $releases .Site.Pages "Params.a" "v1" }}
+
+      {{ $.Scratch.Set "is_latest" true }}
+      {{ range $release := sort $releases ".created_at" "desc"}}
+
+        {{ if in $release.tag_name "-" }}
+
+        {{ else }}
+
+          {{ if in "0123456789" (substr $release.tag_name 0 1) }}
+            {{ $isLatest := ($.Scratch.Get "is_latest") }}
+
+            {{ $tag := (substr $release.tag_name 2 1) | printf "%s%s" (substr $release.tag_name 0 1) }}
+
+            {{ if in ($.Scratch.Get "visited-release") $tag }}
+
+            {{ else }}
+
+              {{ if gt (int $tag) 31}}
+                  {{ $.Scratch.Add "visited-release" (slice $tag) }}
+
+                {{ $isPrerelease := $release.prerelease }}
+                {{ $isDraft := $release.draft }}
+
+                {{ if $isLatest }}
+                <div class="card text-left border-success mb-2" id="{{ $tag }}">
+                {{ else }}
+                <div class="card text-left border-default mb-2" id="{{ $tag }}">
+                {{ end }}
+                  {{ if $isLatest }}
+                  <a class="card-header bg-white border-success" data-toggle="collapse" href="#body-{{ $tag }}" aria-expanded="true" aria-controls="body-{{ $tag }}">
+                  {{ else }}
+                  <a class="card-header bg-white collapsed" data-toggle="collapse" href="#body-{{ $tag }}" aria-expanded="false" aria-controls="body-{{ $tag }}">
+                  {{ end }}
+                    {{ if $isLatest }}
+                    <h4 class="text-success" style="display: inline-block; margin: 0;">CasADi v{{ $release.tag_name }}</h4>
+                    <span class="badge badge-success" style="font-size: 0.5em; vertical-align: top;">latest</span>
+                    {{ else }}
+                    <h4 class="text-default" style="display: inline-block; margin: 0;">CasADi v{{ $release.tag_name }}</h4>
+                    {{ end }}
+                    {{ if $isPrerelease }}
+                    <span class="badge badge-warning text-white" style="font-size: 0.5em; vertical-align: top;">prerelease</span>
+                    {{ end }}
+                    {{ if $isDraft }}
+                    <span class="badge badge-danger text-white" style="font-size: 0.5em; vertical-align: top;">draft</span>
+                    {{ end }}
+                    <!-- <span title="Total downloads" class="badge badge-pill badge-secondary pull-right">12k</span> -->
+                    <span class="release-info text-muted">released {{ dateFormat "January 2, 2006" $release.created_at }}</span>
+                  </a>
+                  {{ if $isLatest }}
+                  <div class="collapse show" id="body-{{ $tag }}">
+                  {{ else }}
+                  <div class="collapse" id="body-{{ $tag }}">
+                  {{ end }}
+
+                    <!-- TODO ad-hoc solution, filtering for exact tags -->
+                    {{ if gt ( countrunes $release.body ) 0 }}
+                      {{ $htmlBody := $release.body | markdownify }}
+                      {{ $htmlBody := split $htmlBody "<h1 id=\"install\">Install</h1>" }}
+                      {{ $htmlBody := index $htmlBody 1 }}
+                      {{ $htmlBody := split $htmlBody "<h1 id=\"troubleshooting\">Troubleshooting</h1>" }}
+                      {{ $htmlInstall := index $htmlBody 0 }}
+                      {{ $htmlBody := index $htmlBody 1 }}
+                      {{ $htmlBody := split $htmlBody "<h1 id=\"release-notes\">Release notes</h1>" }}
+                      {{ $htmlTroubleShooting := index $htmlBody 0 }}
+                      {{ $htmlRelease := index $htmlBody 1 }}
+
+                      {{ if eq ( countrunes ( print $htmlInstall $htmlRelease $htmlTroubleShooting ) ) 0 }}
+                        <div class="card-body tab-content">
+                          {{ $release.body | markdownify }}
+                        </div>
+                      {{ else }}
+                        <div class="nav nav-pills card-header justify-content-center" role="tablist">
+                          {{ if gt ( countrunes $htmlInstall ) 0 }}
+                          <a class="nav-link active" href="#downloadTab-{{ $tag }}" role="tab" data-toggle="tab" aria-selected="true">Install</a>
+                          {{ end }}
+                          {{ if gt ( countrunes $htmlTroubleShooting ) 0 }}
+                          <a class="nav-link" href="#installTab-{{ $tag }}" role="tab" data-toggle="tab" aria-selected="false">Troubleshooting</a>
+                          {{ end }}
+                          {{ if gt ( countrunes $htmlRelease ) 0 }}
+                          <a class="nav-link" href="#notesTab-{{ $tag }}" role="tab" data-toggle="tab" aria-selected="false">Release notes</a>
+                          {{ end }}
+
+                        </div>
+                        <div class="card-body tab-content">
+                          <div id="downloadTab-{{ $tag }}" role="tabpanel" class="tab-pane fade active show">
+                            {{ if gt ( countrunes $htmlInstall ) 0 }}
+                              {{ $htmlInstall | markdownify }}
+                            {{ end }}
+                          </div>
+                          <div id="notesTab-{{ $tag }}" role="tabpanel" class="tab-pane fade">
+                            {{ if gt ( countrunes $htmlRelease ) 0 }}
+                              {{ $htmlRelease | markdownify }}
+                            {{ end }}
+                          </div>
+                          <div id="installTab-{{ $tag }}" role="tabpanel" class="tab-pane fade">
+                            {{ if gt ( countrunes $htmlTroubleShooting ) 0 }}
+                              {{ $htmlTroubleShooting | markdownify }}
+                            {{ end }}
+                          </div>
+                        </div>
+                      {{ end }}
+                    {{ end }}
+
+                    <div class="card-footer release-info text-muted">
+                      <a href="{{ $release.html_url }}" target="_blank" title="Link to the tag published on GitHub">This tag on GitHub</a>
+                    </div>
+                  </div>
+                </div>
+              {{ end }}
+            {{ end }}
+            {{ $.Scratch.Set "is_latest" false }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+
+      <p>Extra links for the adventurous: <a href="http://files.casadi.org/">more versions</a>, <a href="https://github.com/casadi/binaries/releases">nightly builds</a>, <a href="https://github.com/casadi/casadi/wiki/SourceBuild">source build instructions</a></p>
+    </div>
+  </div>
+</div>
+
+{{ partial "footer" . }}

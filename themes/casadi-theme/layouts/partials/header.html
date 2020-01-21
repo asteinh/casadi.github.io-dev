@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    {{ if (.Scratch.Get "Title") }}
+      <title>{{ .Scratch.Get "Title" }}</title>
+    {{ else if (eq .Title "") }}
+      <title>{{ .Site.Title }}</title>
+    {{ else }}
+      <title>{{ .Site.Title }} - {{ .Title }}</title>
+    {{ end }}
+
+    <!-- Font awesome 4.7.0 -->
+    <link href="{{ .Site.BaseURL }}_css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 4 -->
+    <link href="{{ .Site.BaseURL }}_css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Pygments -->
+    <link href="{{ .Site.BaseURL }}_css/pygments-default.css" rel="stylesheet">
+
+    <!-- casadi-theme -->
+    <link href="{{ .Site.BaseURL }}_css/casadi-theme.min.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+          displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+          processEnvironments: false
+        }
+      });
+    </script>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+
+  <body>

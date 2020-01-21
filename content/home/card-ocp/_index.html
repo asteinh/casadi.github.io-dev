@@ -1,0 +1,139 @@
+---
+date: 2014-10-13T20:07:19Z
+draft: false
+title: "Features"
+description: "no description"
+weight: 5
+mode: "manual"
+---
+
+<h2 class="text-center">Composition of the above</h2>
+
+<div class="row">
+<div class="col-md-6">
+<div class="multisnip text-left">
+<div class="highlight">
+<pre><code data-lang="example"></code></pre>
+{{< figure src="composition.png" >}}
+{{< figure src="ocp.png" >}}
+</div>
+{{< highlight octave >}}
+import casadi.*
+
+
+x = MX.sym('x',2); % Two states
+p = MX.sym('p');   % Free parameter
+
+% Expression for ODE right-hand side
+z = 1-x(2)^2;
+rhs = [z*x(1)-x(2)+2*tanh(p);x(1)];
+
+% ODE declaration with free parameter
+ode = struct('x',x,'p',p,'ode',rhs);
+
+% Construct a Function that integrates over 1s
+F = integrator('F','cvodes',ode,struct('tf',1));
+
+% Control vector
+u = MX.sym('u',5,1);
+
+x = [0;1]; % Initial state
+for k=1:5
+  % Integrate 1s forward in time:
+  % call integrator symbolically
+  res = F('x0',x,'p',u(k));
+  x = res.xf;
+end
+
+% NLP declaration
+nlp = struct('x',u,'f',dot(u,u),'g',x);
+
+% Solve using IPOPT
+solver = nlpsol('solver','ipopt',nlp);
+res = solver('x0',0.2,'lbg',0,'ubg',0);
+
+plot(full(res.x))
+{{< /highlight >}}
+{{< highlight python >}}
+from casadi import *
+
+
+x = MX.sym('x',2); # Two states
+p = MX.sym('p');   # Free parameter
+
+# Expression for ODE right-hand side
+z = 1-x[1]**2;
+rhs = vertcat(z*x[0]-x[1]+2*tanh(p),x[0])
+
+# ODE declaration with free parameter
+ode = {'x':x,'p':p,'ode':rhs}
+
+# Construct a Function that integrates over 1s
+F = integrator('F','cvodes',ode,{'tf':1})
+
+# Control vector
+u = MX.sym('u',4,1)
+
+x = [0,1]  # Initial state
+for k in range(4):
+  # Integrate 1s forward in time:
+  # call integrator symbolically
+  res = F(x0=x,p=u[k])
+  x = res["xf"]
+
+
+# NLP declaration
+nlp = {'x':u,'f':dot(u,u),'g':x};
+
+# Solve using IPOPT
+solver = nlpsol('solver','ipopt',nlp)
+res = solver(x0=0.2,lbg=0,ubg=0)
+
+plot(res["x"])
+{{< /highlight >}}
+{{< highlight cpp >}}
+#include <casadi/casadi.hpp>
+using namespace casadi;
+
+MX x = MX::sym("x",2); // Two states
+MX p = MX::sym("p");   // Free parameter
+
+// Expression for ODE right-hand side
+MX z = 1-pow(x(1),2);
+MX rhs = vertcat(z*x(0)-x(1)+2*tanh(p),x(0));
+
+// ODE declaration with free parameter
+MXDict ode = {{"x",x},{"p",p},{"ode",rhs}};
+
+// Construct a Function that integrates over 1s
+Function F = integrator("F","cvodes",ode,{{"tf",1}});
+
+// Control vector
+MX u = MX::sym("u",4,1);
+
+x = DM(std::vector<double>{0,1});  // Initial state
+for (int k=0;k<4;++k) {
+  // Integrate 1s forward in time:
+  // call integrator symbolically
+  MXDict res = F({{"x0",x},{"p",u(k)}});
+  x = res["xf"];
+}
+
+// NLP declaration
+MXDict nlp = {{"x",u},{"f",dot(u,u)},{"g",x}};
+
+// Solve using IPOPT
+Function solver = nlpsol("solver","ipopt",nlp);
+DMDict res = solver(DMDict{{"x0",0.2},{"lbg",0},{"ubg",0}});
+{{< /highlight >}}
+</div>
+</div>
+
+
+  <div class="col-md-6 text-left">
+    <p>CasADi offers a rich set of <em>differentiable</em> operations for its matrix-valued expression graphs, including common <a href="docs/#arithmetic-operations">matrix-valued operations</a>, <a href="docs/#calling-function-objects">serial</a> or <a href="docs/#for-loop-equivalents">parallel</a> function calls, <a href="docs/#non-linear-rootfinding-problems">implicit functions</a>, <a href="docs/#initial-value-problems-and-sensitivity-analysis">integrators</a>, spline-based <a href="docs/#using-lookup-tables">lookup tables</a>, and <a href="docs/#document-custom">external codes</a>.</p>
+    <p>These building blocks allow the user to code a wide variety of <a href="docs/#document-ocp">optimal control problem</a> (OCP) formulations.</p>
+    <p>For example, a single shooting code can be created by embedding a call to an integrator in an NLP declaration.</p>
+
+  </div>
+</div>

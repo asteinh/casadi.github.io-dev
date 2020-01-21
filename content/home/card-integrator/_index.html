@@ -1,0 +1,109 @@
+---
+date: 2014-10-13T20:07:19Z
+draft: false
+title: "Features"
+description: "no description"
+weight: 3
+mode: "manual"
+---
+
+<h2 class="text-center">Dynamic systems</h2>
+
+<div class="row">
+<div class="col-md-6">
+<div class="multisnip text-left">
+<div class="highlight">
+<pre><code data-lang="example"></code></pre>
+{{< figure src="integration.png" >}}
+$$
+\begin{align}
+\left\{
+  \begin{array}{ccll}
+    \dot{x}_1 &=& (1-x_2^2) \, x_1 - x_2, \quad &x_1(0)=0 \\
+    \dot{x}_2 &=& x_1, \quad &x_2(0)=1
+  \end{array}
+  \right.
+\end{align}
+$$
+</div>
+{{< highlight octave >}}
+import casadi.*
+
+
+x = MX.sym('x',2); % Two states
+
+% Expression for ODE right-hand side
+z = 1-x(2)^2;
+rhs = [z*x(1)-x(2);x(1)];
+
+ode = struct;    % ODE declaration
+ode.x   = x;     % states
+ode.ode = rhs;   % right-hand side
+
+% Construct a Function that integrates over 4s
+F = integrator('F','cvodes',ode,struct('tf',4));
+
+% Start from x=[0;1]
+res = F('x0',[0;1]);
+
+print(res.xf)
+{{< /highlight >}}
+{{< highlight python >}}
+from casadi import *
+
+
+x = MX.sym('x',2); # Two states
+
+# Expression for ODE right-hand side
+z = 1-x[1]**2
+rhs = vertcat(z*x[0]-x[1],x[0])
+
+ode = {}         # ODE declaration
+ode['x']   = x   # states
+ode['ode'] = rhs # right-hand side
+
+# Construct a Function that integrates over 4s
+F = integrator('F','cvodes',ode,{'tf':4})
+
+# Start from x=[0;1]
+res = F(x0=[0,1])
+
+print(res["xf"])
+{{< /highlight >}}
+{{< highlight cpp >}}
+#include <casadi/casadi.hpp>
+using namespace casadi;
+
+MX x = MX::sym("x",2); // Two states
+
+// Expression for ODE right-hand side
+MX z = 1-pow(x(1),2);
+MX rhs = vertcat(z*x(0)-x(1),x(0));
+
+MXDict ode;         // ODE declaration
+ode["x"]   = x;     // states
+ode["ode"] = rhs;   // right-hand side
+
+// Construct a Function that integrates over 4s
+Function F = integrator("F","cvodes",ode,{{"tf",4}});
+
+// Start from x=[0;1]
+DMDict res = F(DMDict{{"x0",std::vector<double>{0,1}}});
+{{< /highlight >}}
+</div>
+</div>
+
+<div class="col-md-6  text-left">
+<p><a href="docs/#initial-value-problems-and-sensitivity-analysis">Initial value problems</a> in ordinary or differential-algebraic equations (ODE/DAE) can be calculated using explicit or implicit Runge-Kutta methods or interfaces to IDAS/CVODES from the SUNDIALS suite. Derivatives are calculated using <em>sensitivity equations</em>, up to arbitrary order.</p>
+
+<em>Problem class:</em>
+
+$$
+\begin{aligned}
+ \dot{x} &= f_{\text{ode}}(t,x,z,p), \qquad x(0) = x_0 \\
+      0  &= f_{\text{alg}}(t,x,z,p)
+\end{aligned}
+$$
+
+</div>
+</div>

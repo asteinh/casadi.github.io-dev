@@ -1,0 +1,68 @@
+/* NAVIGATION */
+nav.nav-top {
+  background-color: $casadi-color-navbar-background;
+}
+nav.nav-top .container {
+  background-image: url('../_img/bg_header.svg');
+  background-repeat: repeat-x;
+  // background-size: auto 50px;
+  background-size: cover;
+  background-position: left;
+
+  @include media-breakpoint-down(md) {
+    max-width: 100%;
+  }
+}
+nav.nav-top.navbar {
+  border: none;
+  padding: 0;
+  font-size: 15px;
+  line-height: $casadi-nav-top-height;
+  z-index: 5;
+}
+nav.nav-top.navbar .navbar-toggler {
+  color: $casadi-color-text-secondary;
+}
+nav.nav-top.navbar .navbar-collapse {
+  justify-content: flex-end;
+}
+nav.nav-top.navbar .navbar-nav>li>a {
+  padding: 0px 20px;
+  color: $casadi-color-text-secondary;
+}
+nav.nav-top.navbar .navbar-nav>li.active>a {
+  font-weight: 500;
+}
+nav.nav-top.navbar .navbar-nav>li>a:focus,
+nav.nav-top.navbar .navbar-nav>li>a:hover {
+  box-shadow: 0 -3px 0 0 #fff inset;
+}
+nav.nav-top a.navbar-brand {
+  width: 100px;
+  height: ($casadi-nav-top-height) - 14px;
+  margin: 7px 25px;
+  padding: 0;
+  background: url('../_img/logo_2017_horizontal_white.png') no-repeat center;
+  background-size: contain;
+}
+// nav.nav-top #btn-search {
+//   border: 0;
+//   width: 66px;
+//   height: 66px;
+//   padding: 15px 0px;
+//   float: left;
+// }
+// nav.nav-top #btn-search:focus {
+//   box-shadow: none;
+// }
+// nav.nav-top #field-search {
+//   border: 0;
+//   width: 150px;
+//   // height: 40px;
+//   margin: 13px;
+//   padding: 10px;
+//   font-size: 15px;
+//   line-height: 20px;
+//   display: none;
+//   background: rgba(255,255,255,0.75);
+// }

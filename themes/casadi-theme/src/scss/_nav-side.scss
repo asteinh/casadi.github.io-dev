@@ -1,0 +1,67 @@
+.sidebar {
+  flex: 0 0 250px;
+  z-index: 1;
+  padding: 0;
+
+  @include media-breakpoint-down(md) {
+    display: none;
+  }
+
+  .sticky-offset {
+    top: $casadi-nav-top-height;
+  }
+
+  nav {
+    max-height: calc(100vh - #{$casadi-nav-top-height});
+    overflow-y: auto;
+
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+      // border-radius: 10px;
+      background-color: #F5F5F5;
+    }
+    &::-webkit-scrollbar {
+      width: 3px;
+      background-color: #F5F5F5;
+    }
+    &::-webkit-scrollbar-thumb {
+      // border-radius: 10px;
+      // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+      background-color: $casadi-color-accent;
+    }
+    &.nav-side {
+      background-color: $casadi-color-accent-gray;
+      color: $casadi-color-text;
+      min-height: 75vh;
+      padding: 1em 0;
+
+      & .caption {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: .5em 1em;
+        margin: 0;
+        font-weight: 500;
+      }
+      & ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0 1em;
+        font-size: 0.9em;
+      }
+      & a, a:focus, a:active,
+        pre, code, em {
+        color: unset;
+        text-decoration: none;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        padding: 0;
+        margin: 0;
+      }
+      & a:hover {
+        color: $casadi-color-accent;
+      }
+    }
+  }
+}

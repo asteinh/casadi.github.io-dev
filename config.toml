@@ -1,0 +1,118 @@
+baseURL = "https://web.casadi.org/"
+languageCode = "en-us"
+title = "CasADi"
+theme = "casadi-theme"
+
+publishDir = "public"
+
+[taxonomies]
+  tag = ""
+  group = ""
+  category = ""
+
+[params]
+  author = "Joris Gillis, Armin Steinhauser"
+  logo = "_img/logo_2017_horizontal.png"
+  motto = ""
+
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      definitionList = true
+      footnote = true
+      linkify = true
+      strikethrough = true
+      table = true
+      taskList = true
+      typographer = true
+    [markup.goldmark.parser]
+      attribute = true
+      autoHeadingID = true
+    [markup.goldmark.renderer]
+      hardWraps = false
+      unsafe = true
+      xHTML = false
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "monokai"
+    tabWidth = 4
+  [markup.tableOfContents]
+    endLevel = 3
+    ordered = false
+    startLevel = 2
+
+[menu]
+  [[menu.main]]
+    url = "/"
+    name = "Home"
+    identifier = "home"
+    weight = 1
+
+  [[menu.main]]
+    url = "/get/"
+    name = "Try/Install"
+    identifier = "get"
+    weight = 2
+
+  [[menu.main]]
+    url = "/blog/"
+    name = "Blog"
+    identifier = "blog"
+    weight = 3
+
+  [[menu.main]]
+    url = "/docs/"
+    name = "Docs"
+    identifier = "docs"
+    weight = 3
+
+  [[menu.main]]
+    url = "/events/"
+    name = "Workshops"
+    identifier = "events"
+    weight = 8
+
+  [[menu.main]]
+    url = "/support/"
+    name = "Support"
+    identifier = "support"
+    weight = 9
+
+  [[menu.main]]
+    url = "/about/"
+    name = "About"
+    identifier = "about"
+    weight = 10
+
+  # Footer
+  # [[menu.footer]]
+  #   url = "mailto:me@example.com"
+  #   name = "envelope-o"
+  #   weight = 1
+
+  [[menu.footer]]
+    url = "https://github.com/casadi/casadi"
+    name = "github"
+    weight = 2
+
+  [[menu.footer]]
+    url = "https://twitter.com/casadi_software"
+    name = "twitter"
+    weight = 3
+
+  [[menu.footer]]
+    url = "https://www.youtube.com/channel/UC3VDpv5Pi3R-a2VkcJN1RLw"
+    name = "youtube"
+    weight = 4
+
+  # [[menu.footer]]
+  #   url = "https://github.com/username/"
+  #   name = "linkedin"
+  #   weight = 4

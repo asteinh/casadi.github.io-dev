@@ -1,0 +1,28 @@
+{{ .Scratch.Set "Title" .Site.Title }}
+
+{{ partial "header" . }}
+{{ partial "nav-top" . }}
+{{ partial "landing" . }}
+
+<div id="main" class="container landing">
+  {{ $home := (where .Site.Pages "Section" "home") }}
+  {{ range $index, $element := $home }}
+    {{ if ne $index 0 }}<hr class="sep">{{ end }}
+
+    {{ if (isset .Params "mode") and (eq .Params.mode "manual") }}
+      {{ .Content | safeHTML }}
+    {{ else }}
+      <div class="row">
+        {{ if (isset .Params "colclass") }}
+        <div class="col {{ .Params.colclass }}">
+        {{ else }}
+        <div class="col text-center">
+        {{ end }}
+        {{ .Content | safeHTML }}
+        </div>
+      </div>
+    {{ end }}
+  {{ end }}
+</div>
+
+{{ partial "footer" . }}

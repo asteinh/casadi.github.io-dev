@@ -1,0 +1,5 @@
+{{ .Scratch.Set "Title" ( printf "%s - Docs" .Site.Title ) }}
+
+{{ $versions := (where (where $.Site.Pages.ByTitle.Reverse "Section" "docs") ".Params.layout" "single") }}
+{{ $latest := index $versions 0 }}
+{{ $latest.Render }}
