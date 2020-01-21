@@ -17,7 +17,7 @@ jobs:
     - stage: docs
       script:
         - cd content/docs && rm -rf -- */
-        - git clone git@github.com:asteinh/casadi-docs.git source
+        - git clone https://github.com/asteinh/casadi-docs.git source
         - cd source && bash build_docs.sh
         - cd .. && rm -rf source
       workspaces:
