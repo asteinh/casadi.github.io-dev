@@ -1,11 +1,10 @@
 #!/bin/bash
 
 CONTAINER=asteinh/casadi_docs
-REPOSITORY=asteinh/casadi_docs
 
 cd content/docs
 sudo rm -rf -- */
-git clone git@github.com:$REPOSITORY.git source
+git clone git@github.com:asteinh/casadi_docs.git source
 cd source
 
 container=$(docker run -itd -v ${PWD}:/src $CONTAINER)
