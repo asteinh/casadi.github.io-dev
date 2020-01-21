@@ -1,0 +1,52 @@
+sudo: required
+services:
+  - docker
+
+stages:
+  - docs
+  - build
+  # - test
+  # - deploy
+
+before_install:
+  - docker pull asteinh/casadi_docs
+  - docker pull asteinh/bob-for-hugo
+
+jobs:
+  include:
+    - stage: docs
+      script:
+        - bash build_docs.sh
+      workspaces:
+        create:
+          name: docs
+          paths:
+            - content/docs
+    - stage: build
+      workspaces:
+        use:
+          - docs
+        create:
+          name: public
+          paths:
+            - public
+      script:
+        - docker run -v ${PWD}:/src -w /src -e GITHUB_TOKEN=$GITHUB_TOKEN asteinh/bob-for-hugo /bin/bash build.sh
+        - ls -l public
+        # - sudo touch public/.nojekyll # To make sure files with leading _underscore are served on github pages
+        # - echo "web.casadi.org" > CNAME
+        # - sudo cp CNAME public
+        # - if [ false ]; then exit 1; fi #TODO
+    # - stage: test
+    #   script:
+    #     - ls -l #TODO
+    #     - if [ false ]; then exit 1; fi #TODO
+    # - stage: deploy
+    #   deploy:
+    #     provider: pages
+    #     local_dir: public # publish the "public" folder, where hugo builds by default
+    #     skip_cleanup: true
+    #     github_token: "$GITHUB_TOKEN" # use the github token stored in the environment, which is securely encrypted in `matrix.secure` above
+    #     target-branch: master # publish to 'master' branch
+    #     on:
+    #       branch: develop # only publish on 'main' branch builds
