@@ -1,0 +1,846 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+      <title>CasADi</title>
+    
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/font-awesome.min.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/pygments-default.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/casadi-theme.min.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+          displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+          processEnvironments: false
+        }
+      });
+    </script>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+
+  <body>
+
+
+
+<nav class="navbar fixed-top navbar-expand-lg nav-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://asteinh.github.io/casadi.github.io-dev/"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        
+        
+          
+          <li class="nav-item active">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/">Home</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/get/">Try/Install</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/blog/">Blog</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/docs/">Docs</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/events/">Workshops</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/support/">Support</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/about/">About</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div id="landing-cover">
+  <div class="vert-text">
+    <img src="https://asteinh.github.io/casadi.github.io-dev/_img/logo_2017_horizontal.png" class="logo">
+    <div class="description"></div>
+  </div>
+  <div class="scroll">
+    <i class="fa fa-angle-down fa-2x"></i>
+  </div>
+</div>
+
+
+<div id="main" class="container landing">
+  
+  
+    
+
+    
+      
+<div class="row subtitle">
+  <p>Build efficient optimal control software, with minimal effort.</p>
+</div>
+
+<div class="text-center">
+  <p>CasADi is an <em>open-source</em> tool for <em>nonlinear optimization</em> and <em>algorithmic differentiation</em>.</p>
+  <p>It <em>facilitates</em> rapid &mdash; yet efficient &mdash; implementation of different methods for numerical <em>optimal control</em>, both in an offline context and for nonlinear <em>model predictive control</em> (NMPC).</p>
+</div>
+
+    
+  
+    <hr class="sep">
+
+    
+      <h2 class="text-center">Algorithmic Differentiation (AD)</h2>
+
+<div class="row">
+  <div class="col-md-6  text-left">
+    CasADi's backbone is a <a href="docs/#document-symbolic">symbolic framework</a> implementing forward and reverse mode of <a href="docs/#calculus-algorithmic differentiation">AD</a> on expression graphs to construct gradients, large-and-sparse Jacobians and Hessians.
+    These expression graphs, encapsulated in <a href="docs/#calling-function-objects">Function</a> objects, can be evaluated in a virtual machine or be <a href="docs/#generating-c-code">exported</a> to stand-alone C code.
+  </div>
+  <div class="col-md-6">
+  <div class="multisnip text-left">
+    <div class="highlight">
+      <pre><code data-lang="example"></code></pre>
+      
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/home/card-ad/ad.png" target="_blank">
+  
+    <img src="https://asteinh.github.io/casadi.github.io-dev/home/card-ad/ad.png"  />
+  </a>
+  
+</figure>
+
+
+    </div>
+      <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-octave" data-lang="octave">import casadi<span style="color:#f92672">.*</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Create scalar/matrix symbols</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>x = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x&#39;</span>,<span style="color:#ae81ff">5</span>);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Compose into expressions</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>y = norm(x,<span style="color:#ae81ff">2</span>);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Sensitivity of expression -&gt; new expression</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>grad_y = gradient(y,x)<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Create a Function to evaluate expression</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>f = Function(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">f&#39;</span>,{x},{grad_y});<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Evaluate numerically</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>grad_y_num = f([<span style="color:#ae81ff">1</span>;<span style="color:#ae81ff">2</span>;<span style="color:#ae81ff">3</span>;<span style="color:#ae81ff">4</span>;<span style="color:#ae81ff">5</span>])<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>      </code></pre></div>
+      <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> casadi <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+
+<span style="color:#75715e"># Create scalar/matrix symbols</span>
+x <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">5</span>)
+
+<span style="color:#75715e"># Compose into expressions</span>
+y <span style="color:#f92672">=</span> norm_2(x)
+
+<span style="color:#75715e"># Sensitivity of expression -&gt; new expression</span>
+grad_y <span style="color:#f92672">=</span> gradient(y,x);
+
+<span style="color:#75715e"># Create a Function to evaluate expression</span>
+f <span style="color:#f92672">=</span> Function(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span>,[x],[grad_y])
+
+<span style="color:#75715e"># Evaluate numerically</span>
+grad_y_num <span style="color:#f92672">=</span> f([<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]);
+      </code></pre></div>
+      <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;casadi/casadi.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> casadi;
+
+<span style="color:#75715e">// Create scalar/matrix symbols
+</span><span style="color:#75715e"></span>MX x <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">1</span>);
+
+<span style="color:#75715e">// Compose into expressions
+</span><span style="color:#75715e"></span>MX y <span style="color:#f92672">=</span> norm_2(x);
+
+<span style="color:#75715e">// Sensitivity of expression -&gt; new expression
+</span><span style="color:#75715e"></span>MX grad_y <span style="color:#f92672">=</span> gradient(y,x);
+
+<span style="color:#75715e">// Create a Function to evaluate expression
+</span><span style="color:#75715e"></span>Function f <span style="color:#f92672">=</span> Function(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span>,{x},{grad_y});
+
+<span style="color:#75715e">// Evaluate numerically
+</span><span style="color:#75715e"></span>std<span style="color:#f92672">:</span><span style="color:#f92672">:</span>vector<span style="color:#f92672">&lt;</span>DM<span style="color:#f92672">&gt;</span> grad_y_num <span style="color:#f92672">=</span> f(DM({<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>}));
+      
+</code></pre></div>
+    </div>
+  </div>
+</div>
+
+    
+  
+    <hr class="sep">
+
+    
+      
+<h2 class="text-center">Dynamic systems</h2>
+
+<div class="row">
+<div class="col-md-6">
+<div class="multisnip text-left">
+<div class="highlight">
+<pre><code data-lang="example"></code></pre>
+
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/home/card-integrator/integration.png" target="_blank">
+  
+    <img src="https://asteinh.github.io/casadi.github.io-dev/home/card-integrator/integration.png"  />
+  </a>
+  
+</figure>
+
+
+$$
+\begin{align}
+\left\{
+  \begin{array}{ccll}
+    \dot{x}_1 &=& (1-x_2^2) \, x_1 - x_2, \quad &x_1(0)=0 \\
+    \dot{x}_2 &=& x_1, \quad &x_2(0)=1
+  \end{array}
+  \right.
+\end{align}
+$$
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-octave" data-lang="octave">import casadi<span style="color:#f92672">.*</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>x = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x&#39;</span>,<span style="color:#ae81ff">2</span>); <span style="color:#75715e">% Two states</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Expression for ODE right-hand side</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>z = <span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>x(<span style="color:#ae81ff">2</span>)^<span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>rhs = [z<span style="color:#f92672">*</span>x(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">-</span>x(<span style="color:#ae81ff">2</span>);x(<span style="color:#ae81ff">1</span>)];<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>ode = struct;    <span style="color:#75715e">% ODE declaration</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>ode.x   = x;     <span style="color:#75715e">% states</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>ode.ode = rhs;   <span style="color:#75715e">% right-hand side</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Construct a Function that integrates over 4s</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>F = integrator(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F&#39;</span>,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">cvodes&#39;</span>,ode,struct(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">tf&#39;</span>,<span style="color:#ae81ff">4</span>));<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Start from x=[0;1]</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>res = F(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x0&#39;</span>,[<span style="color:#ae81ff">0</span>;<span style="color:#ae81ff">1</span>]);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>print(res.xf)</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> casadi <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+
+x <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2</span>); <span style="color:#75715e"># Two states</span>
+
+<span style="color:#75715e"># Expression for ODE right-hand side</span>
+z <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>x[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>
+rhs <span style="color:#f92672">=</span> vertcat(z<span style="color:#f92672">*</span>x[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">-</span>x[<span style="color:#ae81ff">1</span>],x[<span style="color:#ae81ff">0</span>])
+
+ode <span style="color:#f92672">=</span> {}         <span style="color:#75715e"># ODE declaration</span>
+ode[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>]   <span style="color:#f92672">=</span> x   <span style="color:#75715e"># states</span>
+ode[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ode</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> rhs <span style="color:#75715e"># right-hand side</span>
+
+<span style="color:#75715e"># Construct a Function that integrates over 4s</span>
+F <span style="color:#f92672">=</span> integrator(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">cvodes</span><span style="color:#e6db74">&#39;</span>,ode,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">tf</span><span style="color:#e6db74">&#39;</span>:<span style="color:#ae81ff">4</span>})
+
+<span style="color:#75715e"># Start from x=[0;1]</span>
+res <span style="color:#f92672">=</span> F(x0<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>])
+
+<span style="color:#66d9ef">print</span>(res[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">xf</span><span style="color:#e6db74">&#34;</span>])</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;casadi/casadi.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> casadi;
+
+MX x <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">2</span>); <span style="color:#75715e">// Two states
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// Expression for ODE right-hand side
+</span><span style="color:#75715e"></span>MX z <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>pow(x(<span style="color:#ae81ff">1</span>),<span style="color:#ae81ff">2</span>);
+MX rhs <span style="color:#f92672">=</span> vertcat(z<span style="color:#f92672">*</span>x(<span style="color:#ae81ff">0</span>)<span style="color:#f92672">-</span>x(<span style="color:#ae81ff">1</span>),x(<span style="color:#ae81ff">0</span>));
+
+MXDict ode;         <span style="color:#75715e">// ODE declaration
+</span><span style="color:#75715e"></span>ode[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>]   <span style="color:#f92672">=</span> x;     <span style="color:#75715e">// states
+</span><span style="color:#75715e"></span>ode[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ode</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> rhs;   <span style="color:#75715e">// right-hand side
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// Construct a Function that integrates over 4s
+</span><span style="color:#75715e"></span>Function F <span style="color:#f92672">=</span> integrator(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">cvodes</span><span style="color:#e6db74">&#34;</span>,ode,{{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">tf</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">4</span>}});
+
+<span style="color:#75715e">// Start from x=[0;1]
+</span><span style="color:#75715e"></span>DMDict res <span style="color:#f92672">=</span> F(DMDict{{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x0</span><span style="color:#e6db74">&#34;</span>,std<span style="color:#f92672">:</span><span style="color:#f92672">:</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">double</span><span style="color:#f92672">&gt;</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>}}});
+</code></pre></div>
+</div>
+</div>
+
+<div class="col-md-6  text-left">
+<p><a href="docs/#initial-value-problems-and-sensitivity-analysis">Initial value problems</a> in ordinary or differential-algebraic equations (ODE/DAE) can be calculated using explicit or implicit Runge-Kutta methods or interfaces to IDAS/CVODES from the SUNDIALS suite. Derivatives are calculated using <em>sensitivity equations</em>, up to arbitrary order.</p>
+
+<em>Problem class:</em>
+
+$$
+\begin{aligned}
+ \dot{x} &= f_{\text{ode}}(t,x,z,p), \qquad x(0) = x_0 \\
+      0  &= f_{\text{alg}}(t,x,z,p)
+\end{aligned}
+$$
+
+</div>
+</div>
+
+    
+  
+    <hr class="sep">
+
+    
+      
+<h2 class="text-center">Nonlinear and quadratic programming</h2>
+
+<div class="row">
+  <div class="col-md-6  text-left">
+<p><a href="docs/#nonlinear-programming">Nonlinear programs</a> (NLPs), possibly with integer variables (MINLP), can be solved using block structure or general sparsity exploiting sequential quadratic programming (SQP) or interfaces to IPOPT/BONMIN, BlockSQP, WORHP, KNITRO and SNOPT. Solution <em>sensitivities</em>, up to arbitrary order, can be calculated analytically. <a href="docs/#quadratic-programming">Quadratic programs</a> (QPs), possibly with integer variables (MIQP), can be solved using a primal-dual active-set method [3] or interfaces to CPLEX, GUROBI, HPMPC, OOQP or qpOASES.<br />
+
+
+<em>Problem class:</em>
+$$
+\begin{array}{cc}
+\begin{array}{c}
+\text{minimize:} \\
+x
+\end{array}
+&
+f(x,p)
+\\
+\begin{array}{c}
+\text{subject to:}
+\end{array}
+&
+\begin{array}{rcl}
+  x_{\textrm{lb}} \le &  x   & \le x_{\textrm{ub}} \\
+  g_{\textrm{lb}} \le &g(x,p)& \le g_{\textrm{ub}}
+\end{array}
+\end{array}
+$$
+
+</p>
+
+
+</div>
+
+<div class="col-md-6">
+
+<div class="multisnip text-left">
+<div class="highlight">
+<pre><code data-lang="example"></code></pre>
+
+$$
+\begin{equation}
+  \begin{array}{cl}
+    \underset{\begin{array}{c}x, y, z\end{array}}{\text{minimize}} \quad &  x^2 + 100 \, z^2 \\
+    \text{subject to} \quad &  z+(1-x)^2 - y = 0
+  \end{array}
+\end{equation}
+$$
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-octave" data-lang="octave">import casadi<span style="color:#f92672">.*</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Symbols/expressions</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>x = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x&#39;</span>);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>y = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y&#39;</span>);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>z = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">z&#39;</span>);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>f = x^<span style="color:#ae81ff">2</span><span style="color:#f92672">+</span><span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>z^<span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>g = z<span style="color:#f92672">+</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>x)^<span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>y;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>nlp = struct;            <span style="color:#75715e">% NLP declaration</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>nlp.x = [x;y;z];         <span style="color:#75715e">% decision vars</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>nlp.f = f;               <span style="color:#75715e">% objective</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>nlp.g = g;               <span style="color:#75715e">% constraints</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Create solver instance</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>F = nlpsol(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F&#39;</span>,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ipopt&#39;</span>,nlp);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Solve the problem using a guess</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>F(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x0&#39;</span>,[<span style="color:#ae81ff">2.5</span> <span style="color:#ae81ff">3.0</span> <span style="color:#ae81ff">0.75</span>],<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ubg&#39;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lbg&#39;</span>,<span style="color:#ae81ff">0</span>)</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> casadi <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+
+<span style="color:#75715e"># Symbols/expressions</span>
+x <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>)
+y <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>)
+z <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">z</span><span style="color:#e6db74">&#39;</span>)
+f <span style="color:#f92672">=</span> x<span style="color:#f92672">*</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">+</span><span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>z<span style="color:#f92672">*</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>
+g <span style="color:#f92672">=</span> z<span style="color:#f92672">+</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>x)<span style="color:#f92672">*</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>y
+
+nlp <span style="color:#f92672">=</span> {}                 <span style="color:#75715e"># NLP declaration</span>
+nlp[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">=</span> vertcat(x,y,z) <span style="color:#75715e"># decision vars</span>
+nlp[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> f             <span style="color:#75715e"># objective</span>
+nlp[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> g             <span style="color:#75715e"># constraints</span>
+
+<span style="color:#75715e"># Create solver instance</span>
+F <span style="color:#f92672">=</span> nlpsol(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ipopt</span><span style="color:#e6db74">&#39;</span>,nlp);
+
+<span style="color:#75715e"># Solve the problem using a guess</span>
+F(x0<span style="color:#f92672">=</span>[<span style="color:#ae81ff">2.5</span>,<span style="color:#ae81ff">3.0</span>,<span style="color:#ae81ff">0.75</span>],ubg<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,lbg<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;casadi/casadi.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> casadi;
+
+<span style="color:#75715e">// Symbols/expressions
+</span><span style="color:#75715e"></span>MX x <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>);
+MX y <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#34;</span>);
+MX z <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">z</span><span style="color:#e6db74">&#34;</span>);
+MX f <span style="color:#f92672">=</span> pow(x,<span style="color:#ae81ff">2</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>pow(z,<span style="color:#ae81ff">2</span>);
+MX g <span style="color:#f92672">=</span> z<span style="color:#f92672">+</span>pow(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>x,<span style="color:#ae81ff">2</span>)<span style="color:#f92672">-</span>y;
+
+MXDict nlp;                 <span style="color:#75715e">// NLP declaration
+</span><span style="color:#75715e"></span>nlp[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">=</span> vertcat(x,y,z);   <span style="color:#75715e">// decision vars
+</span><span style="color:#75715e"></span>nlp[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> f;               <span style="color:#75715e">// objective
+</span><span style="color:#75715e"></span>nlp[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> g;               <span style="color:#75715e">// constraints
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// Create solver instance
+</span><span style="color:#75715e"></span>Function F <span style="color:#f92672">=</span> nlpsol(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ipopt</span><span style="color:#e6db74">&#34;</span>,nlp);
+
+<span style="color:#75715e">// Solve the problem using a guess
+</span><span style="color:#75715e"></span>F(DMDict{{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x0</span><span style="color:#e6db74">&#34;</span>,DM({<span style="color:#ae81ff">2.5</span>,<span style="color:#ae81ff">3.0</span>,<span style="color:#ae81ff">0.75</span>})},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ubg</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">0</span>},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">lbg</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">0</span>}});
+</code></pre></div>
+</div>
+
+  </div>
+</div>
+
+    
+  
+    <hr class="sep">
+
+    
+      
+<h2 class="text-center">Composition of the above</h2>
+
+<div class="row">
+<div class="col-md-6">
+<div class="multisnip text-left">
+<div class="highlight">
+<pre><code data-lang="example"></code></pre>
+
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/home/card-ocp/composition.png" target="_blank">
+  
+    <img src="https://asteinh.github.io/casadi.github.io-dev/home/card-ocp/composition.png"  />
+  </a>
+  
+</figure>
+
+
+
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/home/card-ocp/ocp.png" target="_blank">
+  
+    <img src="https://asteinh.github.io/casadi.github.io-dev/home/card-ocp/ocp.png"  />
+  </a>
+  
+</figure>
+
+
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-octave" data-lang="octave">import casadi<span style="color:#f92672">.*</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>x = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x&#39;</span>,<span style="color:#ae81ff">2</span>); <span style="color:#75715e">% Two states</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>p = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p&#39;</span>);   <span style="color:#75715e">% Free parameter</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Expression for ODE right-hand side</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>z = <span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>x(<span style="color:#ae81ff">2</span>)^<span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>rhs = [z<span style="color:#f92672">*</span>x(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">-</span>x(<span style="color:#ae81ff">2</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>tanh(p);x(<span style="color:#ae81ff">1</span>)];<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% ODE declaration with free parameter</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>ode = struct(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x&#39;</span>,x,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p&#39;</span>,p,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ode&#39;</span>,rhs);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Construct a Function that integrates over 1s</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>F = integrator(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F&#39;</span>,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">cvodes&#39;</span>,ode,struct(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">tf&#39;</span>,<span style="color:#ae81ff">1</span>));<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Control vector</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>u = MX.sym(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">u&#39;</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">1</span>);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>x = [<span style="color:#ae81ff">0</span>;<span style="color:#ae81ff">1</span>]; <span style="color:#75715e">% Initial state</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">for</span> k=<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">5</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">% Integrate 1s forward in time:</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">% call integrator symbolically</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  res = F(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x0&#39;</span>,x,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p&#39;</span>,u(k));<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  x = res.xf;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">end</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% NLP declaration</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>nlp = struct(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x&#39;</span>,u,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">f&#39;</span>,dot(u,u),<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">g&#39;</span>,x);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">% Solve using IPOPT</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>solver = nlpsol(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">solver&#39;</span>,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ipopt&#39;</span>,nlp);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>res = solver(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x0&#39;</span>,<span style="color:#ae81ff">0.2</span>,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lbg&#39;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ubg&#39;</span>,<span style="color:#ae81ff">0</span>);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>plot(full(res.x))</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> casadi <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+
+x <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2</span>); <span style="color:#75715e"># Two states</span>
+p <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>);   <span style="color:#75715e"># Free parameter</span>
+
+<span style="color:#75715e"># Expression for ODE right-hand side</span>
+z <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>x[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>;
+rhs <span style="color:#f92672">=</span> vertcat(z<span style="color:#f92672">*</span>x[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">-</span>x[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>tanh(p),x[<span style="color:#ae81ff">0</span>])
+
+<span style="color:#75715e"># ODE declaration with free parameter</span>
+ode <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>:x,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>:p,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ode</span><span style="color:#e6db74">&#39;</span>:rhs}
+
+<span style="color:#75715e"># Construct a Function that integrates over 1s</span>
+F <span style="color:#f92672">=</span> integrator(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">cvodes</span><span style="color:#e6db74">&#39;</span>,ode,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">tf</span><span style="color:#e6db74">&#39;</span>:<span style="color:#ae81ff">1</span>})
+
+<span style="color:#75715e"># Control vector</span>
+u <span style="color:#f92672">=</span> MX<span style="color:#f92672">.</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">u</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">1</span>)
+
+x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]  <span style="color:#75715e"># Initial state</span>
+<span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>):
+  <span style="color:#75715e"># Integrate 1s forward in time:</span>
+  <span style="color:#75715e"># call integrator symbolically</span>
+  res <span style="color:#f92672">=</span> F(x0<span style="color:#f92672">=</span>x,p<span style="color:#f92672">=</span>u[k])
+  x <span style="color:#f92672">=</span> res[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">xf</span><span style="color:#e6db74">&#34;</span>]
+
+
+<span style="color:#75715e"># NLP declaration</span>
+nlp <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>:u,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span>:dot(u,u),<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#39;</span>:x};
+
+<span style="color:#75715e"># Solve using IPOPT</span>
+solver <span style="color:#f92672">=</span> nlpsol(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">solver</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ipopt</span><span style="color:#e6db74">&#39;</span>,nlp)
+res <span style="color:#f92672">=</span> solver(x0<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,lbg<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,ubg<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+
+plot(res[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>])</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;casadi/casadi.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> casadi;
+
+MX x <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">2</span>); <span style="color:#75715e">// Two states
+</span><span style="color:#75715e"></span>MX p <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#34;</span>);   <span style="color:#75715e">// Free parameter
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// Expression for ODE right-hand side
+</span><span style="color:#75715e"></span>MX z <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>pow(x(<span style="color:#ae81ff">1</span>),<span style="color:#ae81ff">2</span>);
+MX rhs <span style="color:#f92672">=</span> vertcat(z<span style="color:#f92672">*</span>x(<span style="color:#ae81ff">0</span>)<span style="color:#f92672">-</span>x(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>tanh(p),x(<span style="color:#ae81ff">0</span>));
+
+<span style="color:#75715e">// ODE declaration with free parameter
+</span><span style="color:#75715e"></span>MXDict ode <span style="color:#f92672">=</span> {{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>,x},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#34;</span>,p},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ode</span><span style="color:#e6db74">&#34;</span>,rhs}};
+
+<span style="color:#75715e">// Construct a Function that integrates over 1s
+</span><span style="color:#75715e"></span>Function F <span style="color:#f92672">=</span> integrator(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">cvodes</span><span style="color:#e6db74">&#34;</span>,ode,{{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">tf</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">1</span>}});
+
+<span style="color:#75715e">// Control vector
+</span><span style="color:#75715e"></span>MX u <span style="color:#f92672">=</span> MX<span style="color:#f92672">:</span><span style="color:#f92672">:</span>sym(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">u</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">1</span>);
+
+x <span style="color:#f92672">=</span> DM(std<span style="color:#f92672">:</span><span style="color:#f92672">:</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">double</span><span style="color:#f92672">&gt;</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>});  <span style="color:#75715e">// Initial state
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> k<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;k<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">4</span>;<span style="color:#f92672">+</span><span style="color:#f92672">+</span>k) {
+  <span style="color:#75715e">// Integrate 1s forward in time:
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// call integrator symbolically
+</span><span style="color:#75715e"></span>  MXDict res <span style="color:#f92672">=</span> F({{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x0</span><span style="color:#e6db74">&#34;</span>,x},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#34;</span>,u(k)}});
+  x <span style="color:#f92672">=</span> res[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">xf</span><span style="color:#e6db74">&#34;</span>];
+}
+
+<span style="color:#75715e">// NLP declaration
+</span><span style="color:#75715e"></span>MXDict nlp <span style="color:#f92672">=</span> {{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#34;</span>,u},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span>,dot(u,u)},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#34;</span>,x}};
+
+<span style="color:#75715e">// Solve using IPOPT
+</span><span style="color:#75715e"></span>Function solver <span style="color:#f92672">=</span> nlpsol(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">solver</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ipopt</span><span style="color:#e6db74">&#34;</span>,nlp);
+DMDict res <span style="color:#f92672">=</span> solver(DMDict{{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">x0</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">0.2</span>},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">lbg</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">0</span>},{<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ubg</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">0</span>}});
+</code></pre></div>
+</div>
+</div>
+
+
+  <div class="col-md-6 text-left">
+    <p>CasADi offers a rich set of <em>differentiable</em> operations for its matrix-valued expression graphs, including common <a href="docs/#arithmetic-operations">matrix-valued operations</a>, <a href="docs/#calling-function-objects">serial</a> or <a href="docs/#for-loop-equivalents">parallel</a> function calls, <a href="docs/#non-linear-rootfinding-problems">implicit functions</a>, <a href="docs/#initial-value-problems-and-sensitivity-analysis">integrators</a>, spline-based <a href="docs/#using-lookup-tables">lookup tables</a>, and <a href="docs/#document-custom">external codes</a>.</p>
+    <p>These building blocks allow the user to code a wide variety of <a href="docs/#document-ocp">optimal control problem</a> (OCP) formulations.</p>
+    <p>For example, a single shooting code can be created by embedding a call to an integrator in an NLP declaration.</p>
+
+  </div>
+</div>
+
+    
+  
+    <hr class="sep">
+
+    
+      <div class="row">
+        
+        <div class="col text-center">
+        
+        <h2 id="applications">Applications</h2>
+<p>CasADi saves time <strong>prototyping</strong> formulations, <strong>solving</strong> complex engineering problems, and <strong>building</strong> professional optimization tools.</p>
+<p>The landscape of its <strong>academic</strong> and <strong>industrial</strong> applications is diverse:</p></p>
+
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/home/card-users/wordcloud.png" target="_blank">
+  
+    <img src="https://asteinh.github.io/casadi.github.io-dev/home/card-users/wordcloud.png"  />
+  </a>
+  
+</figure>
+
+
+<ul class="wordcloud">
+  <!--<li>thermal control</li>-->
+  <!--<li>wind turbine</li>-->
+  <!--<li>airborne wind</li>-->
+  <!--<li>solar thermal</li>-->
+  <!--<li>fossil fuel</li>-->
+  <!--<li>renewables</li>-->
+  <!--<li>grid balance</li>-->
+  <li>trajectory optimization</li>
+  <li>optimal control</li>
+  <li>OCP</li>
+  <li>moving horizon estimation</li>
+  <li>MHE</li>
+  <li>model predictive control</li>
+  <li>MPC</li>
+  <li>NLP</li>
+  <li>MINLP</li>
+  <li>ODE</li>
+  <li>differential equations</li>
+  <li>algebraic loops</li>
+  <li>DAE</li>
+  <!--<li>bio-reactors</li>-->
+  <!--<li>autonomous vehicles</li>-->
+  <!--<li>iceberg drift</li>-->
+  <li>optimal experiment</li>
+  <li>OED</li>
+  <!--<li>steam power</li>-->
+  <li>pseudo spectral</li>
+  <li>direct collocation</li>
+  <li>single shooting</li>
+  <li>multiple shooting</li>
+  <li>indirect methods</li>
+  <li>machine learning</li>
+  <!--<li>serial robots</li>-->
+  <!--<li>dual control</li>-->
+  <li>distributed MPC</li>
+  <li>multi-objective</li>
+  <li>pareto front</li>
+  <li>robust optimization</li>
+  <li>scenario tree</li>
+  <li>hierarchical control</li>
+  <li>sigma points</li>
+  <!--<li>gearbox synthesis</li>-->
+  <!--<li>artificial pancreas</li>-->
+  <!--<li>polynomial chaos</li>-->
+  <!--<li>traffic control</li>-->
+  <!--<li>MEMS</li>-->
+  <!--<li>walking robot</li>-->
+  <li>design</li>
+  <li>control</li>
+  <li>co-design</li>
+  <li>stochastic optimization</li>
+  <!--<li>spline-relaxations</li>-->
+  <li>multi-level MPC</li>
+  <!--<li>tube following</li>-->
+  <li>time optimal</li>
+  <li>path following</li>
+  <li>iterative learning</li>
+  <li>Gauss-Newton</li>
+  <li>energy</li>
+  <li>medical</li>
+  <!--<li>fixed-bed reactor</li>-->
+  <!--<li>chemical reactor</li>-->
+  <li>stabilization</li>
+  <li>cost curves</li>
+  <li>grey-box model</li>
+  <li>Collision Avoidance</li>
+  <li>Lagrangian Duality</li>
+  <li>economic MPC</li>
+  <li>NMPC</li>
+  <li>self-reflective</li>
+  <li>real-time</li>
+  <li>offline</li>
+  <li>online</li>
+  <!--<li>mesh refinement</li>-->
+  <!--<li>pose estimation</li>
+  <li>heart model</li>-->
+  <li>Lagrange mechanics</li>
+  <!--<li>Baumgarte</li>-->
+  <!--<li>invariants</li>-->
+  <!--<li>atomic layer deposition</li>-->
+  <!--<li> well network</li>-->
+  <li>object-oriented</li>
+  <li>multi-stage</li>
+  <li>path constraints</li>
+  <!--<li>pharmacokinetic</li>-->
+  <li>non-steady</li>
+  <li>periodic</li>
+  <li>cyclic</li>
+  <li>feasibility study</li>
+  <!--<li>air conditioning</li>-->
+  <!--<li>powertrain</li>-->
+  <!--<li>diesel</li>-->
+  <!--<li>biological networks</li>-->
+  <li>offset-free mpc</li>
+  <li>Gaussian</li>
+  <li>belief space</li>
+  <li>continuous systems</li>
+  <li>discrete systems</li>
+  <li>redundant manipulators</li>
+  <li>inverse kinematics</li>
+  <!--<li>marine vessel</li>-->
+  <!--<li>confidence interval</li>-->
+  <!--<li>agriculture</li>-->
+  <!--<li>B-spline</li>-->
+  <!--<li>path-parametric</li>-->
+  <!--<li>invariant description</li>-->
+  <!--<li>heat exchangers</li>-->
+  <li>Jacobian</li>
+  <li>Hessian</li>
+  <li>gradient</li>
+  <li>Lyapunov</li>
+</ul>
+<p>Examples of software with a CasADi backend:
+<a href="http://www.modelon.com/products/jmodelicaorg/">JModelica.org</a>,
+<a href="https://github.com/meco-group/omg-tools">omg-tools</a>,
+<a href="https://bitbucket.org/rawlings-group/mpc-tools-casadi">MPC-tools</a>,
+<a href="https://www.deltares.nl/nl/software/rtc-tools-2/">RTC-tools</a>,
+<a href="http://openocl.org">openocl.org</a>,
+<a href="https://gitlab.mech.kuleuven.be/meco-software/rockit">rockit</a>,
+<a href="https://www.yoptimization.com">yop</a>.</p>
+
+        </div>
+      </div>
+    
+  
+    <hr class="sep">
+
+    
+      <div class="row">
+        
+        <div class="col text-center">
+        
+        <h2 id="ready-to-try">Ready to try?</h2>
+<p><strong>Jump right in</strong> by <a href="get">getting CasADi</a> and exploring the example pack, joining a <a href="events">workshop</a>, or watching a small tutorial.</p>
+
+<div class="youtube">
+  <iframe src="https://www.youtube.com/embed/JI-AyLv68Xs" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+
+        </div>
+      </div>
+    
+  
+    <hr class="sep">
+
+    
+      <div class="row">
+        
+        <div class="col text-center">
+        
+        <h2 id="paper-about-casadi">Paper about CasADi</h2>
+<p>A detailed description of the tool and its implementation can be found in a recent paper in <strong>Mathematical Programming Computation</strong> (<a href="http://paper.casadi.org">preprint</a>). Please <a href="about/#publication">cite</a> this paper if you use CasADi in your academic work.</p>
+
+        </div>
+      </div>
+    
+  
+    <hr class="sep">
+
+    
+      <div class="row">
+        
+        <div class="col text-center">
+        
+        <h2 id="keep-informed">Keep informed</h2>
+<p>Subscribe to our <a href="https://forms.gle/9v1HKPYZDHcBYMXNA">newsletter</a> or follow us on the social media links below.</p>
+
+        </div>
+      </div>
+    
+  
+</div>
+
+    <footer>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto text-center">
+            <ul id="social" class="list-inline">
+              
+                <li class="list-inline-item">
+                  <a href="https://github.com/casadi/casadi" title="github">
+                    <i class="fa fa-github"></i>
+                  </a>
+                </li>
+              
+                <li class="list-inline-item">
+                  <a href="https://twitter.com/casadi_software" title="twitter">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                </li>
+              
+                <li class="list-inline-item">
+                  <a href="https://www.youtube.com/channel/UC3VDpv5Pi3R-a2VkcJN1RLw" title="youtube">
+                    <i class="fa fa-youtube"></i>
+                  </a>
+                </li>
+              
+            </ul>
+            <p class="copyright">Copyright 2020.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    
+    <script src="https://asteinh.github.io/casadi.github.io-dev/_js/bootstrap.min.js"></script>
+
+    
+    <script src="https://asteinh.github.io/casadi.github.io-dev/_js/scripts.js"></script>
+
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+    
+  </body>
+
+</html>
+
+

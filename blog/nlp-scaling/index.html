@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+      <title>CasADi - Blog</title>
+    
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/font-awesome.min.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/pygments-default.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/casadi-theme.min.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+          displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+          processEnvironments: false
+        }
+      });
+    </script>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+
+  <body>
+
+
+
+<nav class="navbar fixed-top navbar-expand-lg nav-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://asteinh.github.io/casadi.github.io-dev/"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/">Home</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/get/">Try/Install</a>
+          </li>
+        
+          
+          <li class="nav-item active">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/blog/">Blog</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/docs/">Docs</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/events/">Workshops</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/support/">Support</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/about/">About</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div id="main" class="container">
+  <div class="row">
+    <div class="col">
+
+      <p>During my master's thesis at KULeuven on optimal control, one of the take-aways were that it's important to scale your variables. It helps convergence if the variables are in the order of 0.01 to 100.</p>
+<p>Master student Thomas Durbin stumbled upon a dramatic example of bad scaling in practice. He works on <a href="../ocp/">optimal control</a> for rockets. As a first toy problem, he studied a 1D rocket the must attain a certain height at $t=100,\mathrm{s}$, with minimal expenditure of fuel. Following good engineering practice, he used SI base units to write the code.</p>
+<p>The gist of the code is as follows (complete code <a href="rocket.m">here</a>):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">m0 = <span style="color:#ae81ff">500000</span>; <span style="color:#75715e">% start mass [kg]</span>
+yT = <span style="color:#ae81ff">100000</span>; <span style="color:#75715e">% final height [m]</span>
+g = <span style="color:#ae81ff">9.81</span>; <span style="color:#75715e">% gravity 9.81 [m/s^2]</span>
+alpha = <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">300</span><span style="color:#f92672">*</span>g); <span style="color:#75715e">% kg/(N*s);</span>
+
+opti = casadi.Opti();
+
+<span style="color:#75715e">% Decision variables [height;velocity;mass]</span>
+x = opti.variable(<span style="color:#ae81ff">3</span>,N<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>);
+y = x(<span style="color:#ae81ff">1</span>,:); <span style="color:#75715e">% height</span>
+v = x(<span style="color:#ae81ff">2</span>,:); <span style="color:#75715e">% velocity</span>
+m = x(<span style="color:#ae81ff">3</span>,:); <span style="color:#75715e">% mass</span>
+u = opti.variable(<span style="color:#ae81ff">1</span>,N); <span style="color:#75715e">% Control vector</span>
+
+<span style="color:#75715e">% Dynamic constraints</span>
+rocket_ode = @(x,u) [x(<span style="color:#ae81ff">2</span>);u<span style="color:#f92672">/</span>x(<span style="color:#ae81ff">3</span>)<span style="color:#f92672">-</span>g;<span style="color:#f92672">-</span>alpha<span style="color:#f92672">*</span>u];
+
+<span style="color:#66d9ef">for</span> k = <span style="color:#ae81ff">1</span>:N
+    opti.subject_to(x(:,k<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> x(:,k) <span style="color:#f92672">+</span> rocket_ode(x(:,k),u(:,k))<span style="color:#f92672">*</span>dt);
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#75715e">% Boundary conditions</span>
+opti.subject_to(x(:,<span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> [<span style="color:#ae81ff">0</span>;<span style="color:#ae81ff">0</span>;m0]);
+opti.subject_to(y(N<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> yT);
+</code></pre></div><p>The solution is quite interesting:</p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/controls.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/controls.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Optimal control of rocket problem.</h1>
+  </figcaption>
+</figure>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/states.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/states.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>optimal states of rocket problem</h1>
+  </figcaption>
+</figure>
+<p>But the focus is here on convergence. It's pretty lousy.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">semilogy(sol.stats.iterations.inf_du)
+semilogy(sol.stats.iterations.inf_pr)
+</code></pre></div><p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/conv.png" target="_blank">
+  
+    <img src="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/conv.png"  />
+  </a>
+  
+  <figcaption>
+    <h1>Convergence</h1>
+    
+  </figcaption>
+  
+</figure>
+
+
+Then, introduce a simple scaling of variables (complete code <a href="rocket_scaled.m">here</a>)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">x =  repmat([<span style="color:#ae81ff">1e5</span>;<span style="color:#ae81ff">2000</span>;<span style="color:#ae81ff">300e3</span>],<span style="color:#ae81ff">1</span>,N<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.*</span>opti.variable(<span style="color:#ae81ff">3</span>,N<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>);
+u = <span style="color:#ae81ff">1e8</span><span style="color:#f92672">*</span>opti.variable(<span style="color:#ae81ff">1</span>,N); <span style="color:#75715e">% Control vector</span>
+</code></pre></div><p>Exact same solution, wildly different convergence:
+
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/conv_scaled.png" target="_blank">
+  
+    <img src="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/conv_scaled.png"  />
+  </a>
+  
+  <figcaption>
+    <h1>Convergence scaled</h1>
+    
+  </figcaption>
+  
+</figure>
+
+</p>
+<p>In conclusion, even if you are using an exact Hessian (which is default in CasADi), and even with a numerical backend (IPOPT) that <a href="https://www.coin-or.org/Ipopt/documentation/node43.html">provides auto-scaling</a>, it's still good practice to scale your NLP!</p>
+<h2 id="addendum-2018-04-09">Addendum 2018-04-09</h2>
+<p><a href="http://homes.esat.kuleuven.be/~optec/events/courses/JohnBetts_coursept1brf.pdf">Guidelines for scaling</a> involve more than just scaling of the variables.
+In IPOPT, objective and constraints (but not variables) are scaled automatically, using first-order sensitivities at the initial guess.
+This is vital for the above example to work. Without it, we need to scale objective and constraints ourselves:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab"><span style="color:#66d9ef">for</span> k = <span style="color:#ae81ff">1</span>:N
+    opti.subject_to(x(:,k<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">./</span>x_nom <span style="color:#f92672">==</span> (x(:,k) <span style="color:#f92672">+</span> rocket_ode(x(:,k),u(:,k))<span style="color:#f92672">*</span>dt)<span style="color:#f92672">./</span>x_nom);
+<span style="color:#66d9ef">end</span>
+<span style="color:#75715e">...</span>
+opti.minimize((m(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">-</span>m(N<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>))<span style="color:#f92672">/</span>m_nom); <span style="color:#75715e">% minimize fuel consumption</span>
+</code></pre></div><p>(complete code <a href="rocket_scaled2.m">here</a>)</p>
+
+      <div class="card-columns">
+        
+          
+            
+            <div class="card border-success">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink2/mpc_diagram.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">CasADi-driven MPC in Simulink (part 2)</h5>
+                <p>In this post, we have a new take on nonlinear MPC in Simulink using CasADi.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink2/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted December 19, 2019
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/nlp_sens/nlp_1d.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Sensitivities of parametric NLP</h5>
+                <p>In this post, we explore the parametric sensitivities of a nonlinear program (NLP).
+While we use &lsquo;Opti stack&rsquo; syntax for modeling, differentiability of NLP solvers works all the same without Opti.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp_sens/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted October 28, 2019
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/parfor/parfor1.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Parfor</h5>
+                <p>In this post we'll explore how to use Matlab's parfor with a CasADi nonlinear program.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/parfor/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted August 23, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/tensorflow/gpflow1d_min.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Tensorflow and CasADi</h5>
+                <p>In this post we'll explore how to couple <a href="https://www.tensorflow.org">Tensorflow</a> and CasADi.
+Thanks to Jonas Koch (student @ Applied Mathematics WWU Muenster) for delivering inspiration and example code.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/tensorflow/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>5 mins</span>
+
+                posted July 30, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+              <div class="card-body">
+                <h5 class="card-title">Breaking free of CasADi&#39;s solvers</h5>
+                <p>Once you've modeled your optimization problem in CasADi,
+you don't have to stick to the solvers we interface.</p>
+<p>In this post, we briefly demonstrate how we can make CasADi and Matlab's <code>fmincon</code> cooperate.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/fmincon/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted July 13, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/s-function/simulink.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">CasADi codegen and S-Functions</h5>
+                <p>While the <a href="http://docs.casadi.org">user guide</a> does explain code-generation in full detail,
+it is handy to have a demonstration in a real environment like Matlab's S-functions.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/s-function/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted July 13, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/conv.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">On the importance of NLP scaling</h5>
+                <p>During my master's thesis at KULeuven on optimal control, one of the take-aways were that it's important to scale your variables. It helps convergence if the variables are in the order of 0.01 to 100.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>2 mins</span>
+
+                posted September 15, 2017
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/hyperworks-industries-architecture-screen-capture-6-726x383.jpg" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Optimal control problems in a nutshell</h5>
+                <p>Optimization.
+There's a mathematical term that sounds familiar to the general public.
+Everyone can imagine engineers working hard to make your car run 1% more fuel-efficient,
+or to slightly increase profit margins for a chemical company.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>5 mins</span>
+
+                posted September 15, 2017
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/opti/rosenbrock1.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Easy NLP modeling in CasADi with Opti</h5>
+                <p><a href="http://install33.casadi.org">Release 3.3.0</a> of CasADi introduced a compact syntax for NLP modeling, using a set of helper classes, collectively known as &lsquo;Opti stack&rsquo;.</p>
+<p>In this post, we briefly demonstrates this functionality.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/opti/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted September 14, 2017
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink/simulink_block.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">CasADi-driven MPC in Simulink (part 1)</h5>
+                <p>CasADi is not a monolithic tool. We can easily couple it to other software to have more fun.
+Today we'll be exploring a <em>simple</em> coupling with Simulink. We'll be showing off nonlinear MPC (NMPC).</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>4 mins</span>
+
+                posted March 8, 2017
+              </div>
+            </div>
+          
+        
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto text-center">
+            <ul id="social" class="list-inline">
+              
+                <li class="list-inline-item">
+                  <a href="https://github.com/casadi/casadi" title="github">
+                    <i class="fa fa-github"></i>
+                  </a>
+                </li>
+              
+                <li class="list-inline-item">
+                  <a href="https://twitter.com/casadi_software" title="twitter">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                </li>
+              
+                <li class="list-inline-item">
+                  <a href="https://www.youtube.com/channel/UC3VDpv5Pi3R-a2VkcJN1RLw" title="youtube">
+                    <i class="fa fa-youtube"></i>
+                  </a>
+                </li>
+              
+            </ul>
+            <p class="copyright">Copyright 2020.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    
+    <script src="https://asteinh.github.io/casadi.github.io-dev/_js/bootstrap.min.js"></script>
+
+    
+    <script src="https://asteinh.github.io/casadi.github.io-dev/_js/scripts.js"></script>
+
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+    
+  </body>
+
+</html>
+

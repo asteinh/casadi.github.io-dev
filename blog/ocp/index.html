@@ -1,0 +1,591 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+      <title>CasADi - Blog</title>
+    
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/font-awesome.min.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/pygments-default.css" rel="stylesheet">
+
+    
+    <link href="https://asteinh.github.io/casadi.github.io-dev/_css/casadi-theme.min.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+          displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+          processEnvironments: false
+        }
+      });
+    </script>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+
+  <body>
+
+
+
+<nav class="navbar fixed-top navbar-expand-lg nav-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://asteinh.github.io/casadi.github.io-dev/"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/">Home</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/get/">Try/Install</a>
+          </li>
+        
+          
+          <li class="nav-item active">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/blog/">Blog</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/docs/">Docs</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/events/">Workshops</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/support/">Support</a>
+          </li>
+        
+          
+          <li class="nav-item">
+          
+            <a class="nav-link" href="/casadi.github.io-dev/about/">About</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div id="main" class="container">
+  <div class="row">
+    <div class="col">
+
+      <p>Optimization.
+There's a mathematical term that sounds familiar to the general public.
+Everyone can imagine engineers working hard to make your car run 1% more fuel-efficient,
+or to slightly increase profit margins for a chemical company.</p>
+<p>That sounds rather dull; an icing on the cake at best.
+Optimization can be more than this. I'd argue that optimization can deliver intelligence or creativity.</p>
+<p>Consider that finding your next chess move amounts to optimization. Consider the results of <a href="http://www.altairhyperworks.com/industry/Architecture">topology optimization</a></p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/hyperworks-industries-architecture-screen-capture-6-726x383.jpg" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/hyperworks-industries-architecture-screen-capture-6-726x383.jpg&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Topology optimization</h1>
+  </figcaption>
+</figure>
+<p>or <a href="https://youtu.be/CXTZHHQ7ZiQ?t=1m5s">evolving artificial life</a>:</p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/evo.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/evo.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Evolving artificial life</h1>
+  </figcaption>
+</figure>
+<p>Our field of research is optimal control, in which we seek time-trajectories for control signals that make a dynamic system carry out a task in an optimal way.</p>
+<p>In many cases, like for a <a href="https://youtu.be/B6vr1x6KDaY?t=5s">double pendulum swing-up</a></p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/doublependulum.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/doublependulum.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Double pendulum</h1>
+  </figcaption>
+</figure>
+<p>the most exciting part of optimal control is not that it can spot the optimum out of many valid trajectories.
+It's that it can find valid trajectories at all, out of the blue.</p>
+<h1 id="slot-car-racing-problem">Slot car racing problem</h1>
+<p>Let's get concrete and solve an actual optimal control problem, using CasADi.
+We will go racing a toy slot car.</p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/racetrack.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/racetrack.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Race track</h1>
+  </figcaption>
+</figure>
+<p>The task is to finish 1 lap as fast as possible, starting from standstill.
+Go too fast, and the car will fly out of its slot.
+There is just one way to control the system: pick the amount of throttle $u(t)$ at any give time.</p>
+<p>First, we encode the knowledge we have about the system dynamics in a differential equation (ODE):</p>
+<p>$$
+\frac{d \begin{bmatrix} p(t) \ v(t) \end{bmatrix}}{dt} = \begin{bmatrix} v(t) \ u(t)-v(t) \end{bmatrix},
+$$
+where $p(t)$ is position and $v(t)$ is speed.</p>
+<p>Summarizing the system states in one vector $x(t) = [p(t);v(t)]$, we have:
+$$
+\dot{x}(t) = f(x(t),u(t)).
+$$</p>
+<p>Next, we encode the the task definition in a continuous-time optimal control problem (OCP).</p>
+<p>$$
+\begin{align}
+\displaystyle \underset{\begin{array}{c}x(\cdot), u(\cdot)\end{array}}
+{\text{minimize}}\quad &amp;\displaystyle T \newline
+\text{subject to} , \quad
+&amp; \dot{x}(t) = f(x(t),u(t)) \quad  t \in [0,T], &amp; \textrm{dynamic constraints} \newline
+&amp; p(0) = 0, &amp; \textrm{boundary condition: start at position 0}  \newline
+&amp; v(0) = 0, &amp; \textrm{boundary condition: start with zero speed}\newline
+&amp; p(T) = 1, &amp; \textrm{boundary condition: the finish line is at position 1}\newline
+&amp; 0 \leq u(t) \leq 1, &amp; \textrm{path constraint: throttle is limited} \newline
+&amp; v(t) \leq L(p(t)). &amp; \textrm{path constraint: speed limit varying along the track} \newline
+\end{align}
+$$</p>
+<p>Note our decision variables $x(\cdot)$ and $u(\cdot)$: the result of the optimization should be functions, i.e. infinitely detailed descriptions of how the states and control should move over time from $0$ to $T$:</p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/xu_cont.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/xu_cont.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Continuous-time states and controls</h1>
+  </figcaption>
+</figure>
+<h1 id="multiple-shooting">Multiple-shooting</h1>
+<p>Computers don't like infinities. Therefore, let's discretize the problem in time.
+Choose a number $N$ of control intervals in which the control effort is kept constant:</p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/u_disc.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/u_disc.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Discretized controls</h1>
+  </figcaption>
+</figure>
+<p>We now have decision variables $u_1,u_2,\ldots,u_{N}$ instead of function $u(\cdot)$.</p>
+<p>For the state trajectory, let's consider the states at the boundaries of each control interval:</p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/xu_disc.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/xu_disc.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Discretized states and controls</h1>
+  </figcaption>
+</figure>
+<p>We now have decision variables $x_1,x_2,\ldots,x_{N+1}$ instead of function $x(\cdot)$.</p>
+<p>In each control interval $k$, we now have a start state $x_k$ and a fixed control signal $u_k$.
+Over this interval, we may perform a time integration of our ODE.
+For example, using explicit euler: $x_{k+1} \approx x_{k} + \frac{T}{N} f(x_k,u_k)$, in general:</p>
+<p>$$
+x_{k+1} = F(x_k,u_k).
+$$</p>
+<p>For each interval the integrator predicts were our system will end up at the end of that interval.
+Starting our numerical optimization with putting all states at a constant location, the picture may look like:</p>
+<figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/xu_gap.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/xu_gap.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Gaps</h1>
+  </figcaption>
+</figure>
+<p>We notice gaps here; there's a mismatch between were the integrator says we will end up and where our state decision variables think we are.
+What we do is add constraints that make the gap zero.</p>
+<p>The result is a multiple-shooting transcription of the original OCP:</p>
+<p>$$
+\begin{align}
+\displaystyle \underset{u_1,u_2,\ldots,u_{N},x_1,x_2,\ldots,x_{N+1}}
+{\text{minimize}}\quad &amp;\displaystyle T \newline
+\text{subject to} , \quad
+&amp; x_{k+1} = F(x_k,u_k) \quad  k=1 \ldots N, &amp; \textrm{dynamic constraints a.k.a. gap closing} \newline
+&amp; p_1 = 0, &amp; \textrm{boundary condition: start at position 0}  \newline
+&amp; v_1 = 0, &amp; \textrm{boundary condition: start with zero speed}\newline
+&amp; p_{N+1} = 1, &amp; \textrm{boundary condition: the finish line is at position 1}\newline
+&amp; 0 \leq u_k \leq 1, \quad  k=1 \ldots N , &amp; \textrm{path constraint: throttle is limited} \newline
+&amp; v_k \leq L(p_k). \quad  k=1 \ldots N+1 &amp; \textrm{path constraint: speed limit varying along the track} \newline
+\end{align}
+$$</p>
+<h1 id="coding">Coding</h1>
+<p>Let's get coding, using CasADi's <a href="../opti/">Opti</a> functionality.</p>
+<p>Set up the problem</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">N = <span style="color:#ae81ff">100</span>; <span style="color:#75715e">% number of control intervals</span>
+
+opti = casadi.Opti(); <span style="color:#75715e">% Optimization problem</span>
+</code></pre></div><p>Declare decision variables.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">X = opti.variable(<span style="color:#ae81ff">2</span>,N<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>); <span style="color:#75715e">% state trajectory</span>
+pos   = X(<span style="color:#ae81ff">1</span>,:);
+speed = X(<span style="color:#ae81ff">2</span>,:);
+U = opti.variable(<span style="color:#ae81ff">1</span>,N);   <span style="color:#75715e">% control trajectory (throttle)</span>
+T = opti.variable();      <span style="color:#75715e">% final time</span>
+</code></pre></div><p>Set the objective.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">opti.minimize(T); <span style="color:#75715e">% race in minimal time</span>
+</code></pre></div><p>Specify system dynamics.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">f = @(x,u) [x(<span style="color:#ae81ff">2</span>);u<span style="color:#f92672">-</span>x(<span style="color:#ae81ff">2</span>)]; <span style="color:#75715e">% dx/dt = f(x,u)</span>
+</code></pre></div><p>Create gap closing constraints, picking Runge-Kutta as integration method.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">dt = T<span style="color:#f92672">/</span>N; <span style="color:#75715e">% length of a control interval</span>
+<span style="color:#66d9ef">for</span> k=<span style="color:#ae81ff">1</span>:N <span style="color:#75715e">% loop over control intervals</span>
+   <span style="color:#75715e">% Runge-Kutta 4 integration</span>
+   k1 = f(X(:,k),         U(:,k));
+   k2 = f(X(:,k)<span style="color:#f92672">+</span>dt<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>k1, U(:,k));
+   k3 = f(X(:,k)<span style="color:#f92672">+</span>dt<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>k2, U(:,k));
+   k4 = f(X(:,k)<span style="color:#f92672">+</span>dt<span style="color:#f92672">*</span>k3,   U(:,k));
+   x_next = X(:,k) <span style="color:#f92672">+</span> dt<span style="color:#f92672">/</span><span style="color:#ae81ff">6</span><span style="color:#f92672">*</span>(k1<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>k2<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>k3<span style="color:#f92672">+</span>k4);
+   opti.subject_to(X(:,k<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">==</span>x_next); <span style="color:#75715e">% close the gaps</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Set path constraints.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">limit = @(pos) <span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>sin(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>pi<span style="color:#f92672">*</span>pos)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>;
+opti.subject_to(speed<span style="color:#f92672">&lt;</span>=limit(pos)); <span style="color:#75715e">% track speed limit</span>
+opti.subject_to(<span style="color:#ae81ff">0</span><span style="color:#f92672">&lt;</span>=U<span style="color:#f92672">&lt;</span>=<span style="color:#ae81ff">1</span>);           <span style="color:#75715e">% control is limited</span>
+</code></pre></div><p>Set boundary conditions.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">opti.subject_to(pos(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>);   <span style="color:#75715e">% start at position 0 ...</span>
+opti.subject_to(speed(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>); <span style="color:#75715e">% ... from stand-still</span>
+opti.subject_to(pos(N<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>); <span style="color:#75715e">% finish line at position 1</span>
+</code></pre></div><p>One extra constraint.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">opti.subject_to(T<span style="color:#f92672">&gt;</span>=<span style="color:#ae81ff">0</span>); <span style="color:#75715e">% Time must be positive</span>
+</code></pre></div><p>Provide initial guesses for the solver:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">opti.set_initial(speed, <span style="color:#ae81ff">1</span>);
+opti.set_initial(T, <span style="color:#ae81ff">1</span>);
+</code></pre></div><p>Solve the NLP using IPOPT</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">opti.solver(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ipopt&#39;</span>); <span style="color:#75715e">% set numerical backend</span>
+sol = opti.solve();   <span style="color:#75715e">% actual solve</span>
+</code></pre></div><p>Post processing of the optimal values.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">plot(sol.value(speed));
+plot(sol.value(pos));
+</code></pre></div><figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/OCP_sol.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/OCP_sol.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Solution of race car problem</h1>
+  </figcaption>
+</figure>
+<p>The solution is intuitive: we give 100% throttle, until we hit the speed limit. Next, we gradually inrease throttle again as the speed limit is raised.</p>
+<p>A characteristic of the multiple-shooting approach is that there are many optimization variables (much more than in single-shooting),
+but there is a lot of sparsity in the problem.</p>
+<p>Indeed, have a look at the sparsity of the constraint Jacobian:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-matlab" data-lang="matlab">spy(sol.value(jacobian(opti.g,opti.x)))
+</code></pre></div><figure class=" default">
+  <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/jac_sp.png" target="_blank">
+<pre><code>&lt;img src=&quot;https://asteinh.github.io/casadi.github.io-dev/blog/ocp/jac_sp.png&quot;  /&gt;
+</code></pre>
+  </a>
+  <figcaption>
+    <h1>Sparsity of constraint jacobian</h1>
+  </figcaption>
+</figure>
+<p>This structure is automatically detected and exploited by CasADi.</p>
+<p>Download code: <a href="race_car.m">race_car.m</a></p>
+
+      <div class="card-columns">
+        
+          
+            
+            <div class="card border-success">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink2/mpc_diagram.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">CasADi-driven MPC in Simulink (part 2)</h5>
+                <p>In this post, we have a new take on nonlinear MPC in Simulink using CasADi.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink2/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted December 19, 2019
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/nlp_sens/nlp_1d.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Sensitivities of parametric NLP</h5>
+                <p>In this post, we explore the parametric sensitivities of a nonlinear program (NLP).
+While we use &lsquo;Opti stack&rsquo; syntax for modeling, differentiability of NLP solvers works all the same without Opti.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp_sens/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted October 28, 2019
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/parfor/parfor1.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Parfor</h5>
+                <p>In this post we'll explore how to use Matlab's parfor with a CasADi nonlinear program.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/parfor/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted August 23, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/tensorflow/gpflow1d_min.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Tensorflow and CasADi</h5>
+                <p>In this post we'll explore how to couple <a href="https://www.tensorflow.org">Tensorflow</a> and CasADi.
+Thanks to Jonas Koch (student @ Applied Mathematics WWU Muenster) for delivering inspiration and example code.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/tensorflow/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>5 mins</span>
+
+                posted July 30, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+              <div class="card-body">
+                <h5 class="card-title">Breaking free of CasADi&#39;s solvers</h5>
+                <p>Once you've modeled your optimization problem in CasADi,
+you don't have to stick to the solvers we interface.</p>
+<p>In this post, we briefly demonstrate how we can make CasADi and Matlab's <code>fmincon</code> cooperate.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/fmincon/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted July 13, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/s-function/simulink.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">CasADi codegen and S-Functions</h5>
+                <p>While the <a href="http://docs.casadi.org">user guide</a> does explain code-generation in full detail,
+it is handy to have a demonstration in a real environment like Matlab's S-functions.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/s-function/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted July 13, 2018
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/conv.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">On the importance of NLP scaling</h5>
+                <p>During my master's thesis at KULeuven on optimal control, one of the take-aways were that it's important to scale your variables. It helps convergence if the variables are in the order of 0.01 to 100.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/nlp-scaling/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>2 mins</span>
+
+                posted September 15, 2017
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/hyperworks-industries-architecture-screen-capture-6-726x383.jpg" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Optimal control problems in a nutshell</h5>
+                <p>Optimization.
+There's a mathematical term that sounds familiar to the general public.
+Everyone can imagine engineers working hard to make your car run 1% more fuel-efficient,
+or to slightly increase profit margins for a chemical company.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/ocp/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>5 mins</span>
+
+                posted September 15, 2017
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/opti/rosenbrock1.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">Easy NLP modeling in CasADi with Opti</h5>
+                <p><a href="http://install33.casadi.org">Release 3.3.0</a> of CasADi introduced a compact syntax for NLP modeling, using a set of helper classes, collectively known as &lsquo;Opti stack&rsquo;.</p>
+<p>In this post, we briefly demonstrates this functionality.</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/opti/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>3 mins</span>
+
+                posted September 14, 2017
+              </div>
+            </div>
+          
+        
+          
+            
+            <div class="card">
+            
+              
+                <img class="card-img-top" src="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink/simulink_block.png" alt="Card image cap" />
+              
+              <div class="card-body">
+                <h5 class="card-title">CasADi-driven MPC in Simulink (part 1)</h5>
+                <p>CasADi is not a monolithic tool. We can easily couple it to other software to have more fun.
+Today we'll be exploring a <em>simple</em> coupling with Simulink. We'll be showing off nonlinear MPC (NMPC).</p>
+                <a href="https://asteinh.github.io/casadi.github.io-dev/blog/mpc-simulink/" class="btn btn-primary">Read more</a>
+              </div>
+              <div class="card-footer text-muted text-right">
+                <span class="reading-time-short text-muted"><i class="fa fa-clock-o"></i>4 mins</span>
+
+                posted March 8, 2017
+              </div>
+            </div>
+          
+        
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto text-center">
+            <ul id="social" class="list-inline">
+              
+                <li class="list-inline-item">
+                  <a href="https://github.com/casadi/casadi" title="github">
+                    <i class="fa fa-github"></i>
+                  </a>
+                </li>
+              
+                <li class="list-inline-item">
+                  <a href="https://twitter.com/casadi_software" title="twitter">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                </li>
+              
+                <li class="list-inline-item">
+                  <a href="https://www.youtube.com/channel/UC3VDpv5Pi3R-a2VkcJN1RLw" title="youtube">
+                    <i class="fa fa-youtube"></i>
+                  </a>
+                </li>
+              
+            </ul>
+            <p class="copyright">Copyright 2020.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    
+    <script src="https://asteinh.github.io/casadi.github.io-dev/_js/bootstrap.min.js"></script>
+
+    
+    <script src="https://asteinh.github.io/casadi.github.io-dev/_js/scripts.js"></script>
+
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+    
+  </body>
+
+</html>
+
