@@ -2,7 +2,7 @@
 
 CONTAINER=asteinh/casadi_docs
 
-cd content/docs && rm -rf -- */
+cd content/docs && sudo rm -rf -- */
 git clone https://github.com/asteinh/casadi-docs.git source
 cd source
 
@@ -16,10 +16,10 @@ for remote in $(git for-each-ref --format='%(refname)' refs/remotes); do
     local=${remote#refs/remotes/origin/}
     git checkout $local && git pull
     docker exec -it $container /bin/bash -c "make html"
-    chown -R $(id -u):$(id -g) build/
+    sudo chown -R $(id -u):$(id -g) build/
     folder=$(git rev-parse --abbrev-ref HEAD | sed -e 's/\.//g')
     mv build/$folder ../$folder
   fi
 done
 
-cd .. && rm -rf source && cd ../..
+cd .. && sudo rm -rf source && cd ../..
