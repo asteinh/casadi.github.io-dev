@@ -2,6 +2,10 @@
 
 CONTAINER=asteinh/casadi_docs
 
+cd content/docs && rm -rf -- */
+git clone https://github.com/asteinh/casadi-docs.git source
+cd source
+
 container=$(docker run -itd -v ${PWD}:/src $CONTAINER)
 docker exec -it $container /bin/bash -c "pip3 install -r requirements.txt"
 docker exec -it $container /bin/bash -c "ln -s /usr/bin/python3 /usr/bin/python"
@@ -17,3 +21,5 @@ for remote in $(git for-each-ref --format='%(refname)' refs/remotes); do
     mv build/$folder ../$folder
   fi
 done
+
+cd .. && rm -rf source && cd ../..
