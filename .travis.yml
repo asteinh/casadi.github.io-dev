@@ -16,7 +16,10 @@ jobs:
   include:
     - stage: docs
       script:
-        - bash build_docs.sh
+        - cd content/docs && rm -rf -- */
+        - git clone git@github.com:asteinh/casadi_docs.git source
+        - cd source && bash build_docs.sh
+        - cd .. && rm -rf source
       workspaces:
         create:
           name: docs
@@ -33,6 +36,7 @@ jobs:
       script:
         - docker run -v ${PWD}:/src -w /src -e GITHUB_TOKEN=$GITHUB_TOKEN asteinh/bob-for-hugo /bin/bash build.sh
         - ls -l public
+        - ls -l public/docs
         # - sudo touch public/.nojekyll # To make sure files with leading _underscore are served on github pages
         # - echo "web.casadi.org" > CNAME
         # - sudo cp CNAME public
