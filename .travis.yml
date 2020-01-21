@@ -51,3 +51,7 @@ jobs:
     #     target-branch: master # publish to 'master' branch
     #     on:
     #       branch: develop # only publish on 'main' branch builds
+
+cache:
+  directories:
+    - public
